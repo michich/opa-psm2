@@ -105,9 +105,9 @@ psm2_error_t ips_tf_init(struct ips_protoexp *protoexp,
 	 * for context sharing, otherwise calloc() it */
 	tfc->tf_ctrl = (struct ips_tf_ctrl *)context->tf_ctrl;
 	if (!tfc->tf_ctrl) {
-		tfc->tf_ctrl = (struct ips_tf_ctrl *)
-		    psmi_calloc(context->ep, UNDEFINED, 1,
-				sizeof(struct ips_tf_ctrl));
+		tfc->tf_ctrl = psmi_memalign(context->ep, UNDEFINED,
+					     __alignof__(struct ips_tf_ctrl),
+					     sizeof(struct ips_tf_ctrl));
 		if (tfc->tf_ctrl == NULL) {
 			return PSM2_NO_MEMORY;
 		}

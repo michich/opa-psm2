@@ -535,10 +535,12 @@ static PSMI_HAL_INLINE int hfp_gen1_context_open(int unit,
 				 uint32_t cap_mask,
 				 unsigned retryCnt)
 {
-	int fd = -1;
+	hfp_gen1_pc_private *pc_private;
 	psm2_error_t err = PSM2_OK;
-	hfp_gen1_pc_private *pc_private = psmi_malloc(ep, UNDEFINED, sizeof(hfp_gen1_pc_private));
+	int fd = -1;
 
+	pc_private = psmi_memalign(ep, UNDEFINED, __alignof__(hfp_gen1_pc_private),
+				   sizeof(hfp_gen1_pc_private));
 	if_pf (!pc_private) {
 		err = -PSM_HAL_ERROR_CANNOT_OPEN_CONTEXT;
 		goto bail;

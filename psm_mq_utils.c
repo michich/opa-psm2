@@ -138,7 +138,7 @@ psm2_error_t psmi_mq_req_init(psm2_mq_t mq)
 
 		if ((mq->sreq_pool =
 		     psmi_mpool_create(sizeof(struct psm2_mq_req), chunksz,
-				       maxsz, 0, DESCRIPTORS, NULL,
+				       maxsz, PSMI_MPOOL_ALIGN, DESCRIPTORS, NULL,
 				       NULL)) == NULL) {
 			err = PSM2_NO_MEMORY;
 			goto fail;
@@ -157,7 +157,7 @@ psm2_error_t psmi_mq_req_init(psm2_mq_t mq)
 			goto fail;
 		if ((mq->rreq_pool =
 			psmi_mpool_create(sizeof(struct psm2_mq_req), chunksz,
-				       maxsz, 0, DESCRIPTORS, NULL,
+				       maxsz, PSMI_MPOOL_ALIGN, DESCRIPTORS, NULL,
 				       NULL)) == NULL) {
 			err = PSM2_NO_MEMORY;
 			goto fail;

@@ -138,9 +138,9 @@ ips_tid_init(const psmi_context_t *context, struct ips_protoexp *protoexp,
 	 */
 	tidc->tid_ctrl = (struct ips_tid_ctrl *)context->tid_ctrl;
 	if (!tidc->tid_ctrl) {
-		tidc->tid_ctrl = (struct ips_tid_ctrl *)
-		    psmi_calloc(context->ep, UNDEFINED, 1,
-				sizeof(struct ips_tid_ctrl));
+		tidc->tid_ctrl = psmi_memalign(context->ep, UNDEFINED,
+					       __alignof__(struct ips_tid_ctrl),
+					       sizeof(struct ips_tid_ctrl));
 		if (tidc->tid_ctrl == NULL) {
 			return PSM2_NO_MEMORY;
 		}

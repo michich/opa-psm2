@@ -118,8 +118,8 @@ ips_spio_init(const struct psmi_context *context, struct ptl *ptl,
 	ctrl->spio_ctrl = (struct ips_spio_ctrl *)context->spio_ctrl;
 	if (!ctrl->spio_ctrl) {
 		ctrl->spio_ctrl = (volatile struct ips_spio_ctrl *)
-		    psmi_calloc(context->ep, UNDEFINED, 1,
-				sizeof(struct ips_spio_ctrl));
+		    psmi_memalign(context->ep, UNDEFINED, __alignof__(struct ips_spio_ctrl),
+				  sizeof(struct ips_spio_ctrl));
 		if (ctrl->spio_ctrl == NULL) {
 			return PSM2_NO_MEMORY;
 		}
