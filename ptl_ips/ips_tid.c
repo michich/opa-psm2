@@ -144,6 +144,8 @@ ips_tid_init(const psmi_context_t *context, struct ips_protoexp *protoexp,
 		if (tidc->tid_ctrl == NULL) {
 			return PSM2_NO_MEMORY;
 		}
+
+		memset(tidc->tid_ctrl, 0, sizeof(*tidc->tid_ctrl));
 	}
 
 	/*

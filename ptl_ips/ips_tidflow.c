@@ -111,6 +111,8 @@ psm2_error_t ips_tf_init(struct ips_protoexp *protoexp,
 		if (tfc->tf_ctrl == NULL) {
 			return PSM2_NO_MEMORY;
 		}
+
+		memset(tfc->tf_ctrl, 0, sizeof(*tfc->tf_ctrl));
 	}
 
 	/*

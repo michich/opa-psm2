@@ -124,6 +124,7 @@ ips_spio_init(const struct psmi_context *context, struct ptl *ptl,
 			return PSM2_NO_MEMORY;
 		}
 
+		memset((void *)ctrl->spio_ctrl, 0, sizeof(*ctrl->spio_ctrl));
 		ctrl->spio_reset_hfi = spio_reset_hfi;
 		ctrl->spio_credit_return_update =
 				spio_credit_return_update;
