@@ -446,7 +446,6 @@ specfile: specfile_clean | $(OUTDIR)
 		sed -e 's/@TARGLIB@/'${TARGLIB}'/g' \
 			-e 's/@RPM_NAME@/'${RPM_NAME}'/g' \
 			-e 's/@RPM_NAME_BASEEXT@/'${RPM_NAME_BASEEXT}'/g' \
-			-e 's;@UDEVDIR@;'${UDEVDIR}';g' \
 			-e 's/@MAJOR@/'${MAJOR}'/g' \
 			-e 's/@MINOR@/'${MINOR}'/g' \
 			-e 's:@LIBPSM2_COMPAT_SYM_CONF_DIR@:'${LIBPSM2_COMPAT_SYM_CONF_DIR}':g' \
