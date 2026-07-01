@@ -153,7 +153,6 @@ make %{?_smp_mflags}
 %license COPYING
 %{_libdir}/@TARGLIB@.so.@MAJOR@.@MINOR@
 %{_libdir}/@TARGLIB@.so.@MAJOR@
-@40_PSM_RULES@
 
 %files -n @RPM_NAME@-devel
 %{_libdir}/@TARGLIB@.so

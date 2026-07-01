@@ -175,14 +175,12 @@ LIBPSM2_COMPAT_SYM_CONF_DIR := /etc
 # It then messes up sed operations for PSM_CUDA=1.
 # So leaving the commented out line here as documentation to NOT set it.
 # SPEC_FILE_RELEASE_DIST :=
-UDEV_40_PSM_RULES := %{_udevrulesdir}/40-psm.rules
 
 ifeq (fedora,$(DISTRO))
 	# On Fedora, we change these two variables to these values:
 	LIBPSM2_COMPAT_CONF_DIR := /usr/lib
 	LIBPSM2_COMPAT_SYM_CONF_DIR := %{_prefix}/lib
 	SPEC_FILE_RELEASE_DIST := %{?dist}
-	UDEV_40_PSM_RULES :=#
 else ifeq (rhel,${DISTRO})
 	# Insert code specific to RHEL here.
 else ifeq (sles,${DISTRO})
@@ -416,9 +414,6 @@ install: all
 	install -m 0644 -D psm2.h ${DESTDIR}/usr/include/psm2.h
 	install -m 0644 -D psm2_mq.h ${DESTDIR}/usr/include/psm2_mq.h
 	install -m 0644 -D psm2_am.h ${DESTDIR}/usr/include/psm2_am.h
-ifneq (fedora,${DISTRO})
-	install -m 0644 -D 40-psm.rules ${DESTDIR}$(UDEVDIR)/rules.d/40-psm.rules
-endif
 	# The following files and dirs were part of the noship rpm:
 	mkdir -p ${DESTDIR}/usr/include/hfi1diag
 	mkdir -p ${DESTDIR}/usr/include/hfi1diag/linux-x86_64
@@ -458,11 +453,6 @@ specfile: specfile_clean | $(OUTDIR)
 			-e 's;@SPEC_FILE_RELEASE_DIST@;'${SPEC_FILE_RELEASE_DIST}';g'  \
 			-e 's/@DIST_SHA@/'${DIST_SHA}'/g' > \
 		${OUTDIR}/${RPM_NAME}.spec
-	if [ -f /etc/redhat-release ] && [ `grep -o "[0-9.]*" /etc/redhat-release | cut -d"." -f1` -lt 7 ]; then \
-		sed -i 's;@40_PSM_RULES@;'${UDEVDIR}'/rules.d/40-psm.rules;g' ${OUTDIR}/${RPM_NAME}.spec; \
-	else \
-		sed -i 's;@40_PSM_RULES@;'${UDEV_40_PSM_RULES}';g' ${OUTDIR}/${RPM_NAME}.spec; \
-	fi
 
 # We can't totally prevent two make dist calls in a row from packaging
 # the previous make dist, unless we switch to using a dedicated ./src folder
