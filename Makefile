@@ -451,12 +451,9 @@ specfile: specfile_clean | $(OUTDIR)
 		sed -e 's/@TARGLIB@/'${TARGLIB}'/g' \
 			-e 's/@RPM_NAME@/'${RPM_NAME}'/g' \
 			-e 's/@RPM_NAME_BASEEXT@/'${RPM_NAME_BASEEXT}'/g' \
-			-e 's/@COMPATLIB@/'${COMPATLIB}'/g' \
-			-e 's/@COMPATMAJOR@/'${COMPATMAJOR}'/g' \
 			-e 's;@UDEVDIR@;'${UDEVDIR}';g' \
 			-e 's/@MAJOR@/'${MAJOR}'/g' \
 			-e 's/@MINOR@/'${MINOR}'/g' \
-			-e 's:@LIBPSM2_COMPAT_CONF_DIR@:'${LIBPSM2_COMPAT_CONF_DIR}':g' \
 			-e 's:@LIBPSM2_COMPAT_SYM_CONF_DIR@:'${LIBPSM2_COMPAT_SYM_CONF_DIR}':g' \
 			-e 's;@SPEC_FILE_RELEASE_DIST@;'${SPEC_FILE_RELEASE_DIST}';g'  \
 			-e 's/@DIST_SHA@/'${DIST_SHA}'/g' > \
