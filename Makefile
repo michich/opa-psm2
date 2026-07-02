@@ -168,18 +168,22 @@ nthreads := $(shell echo $$(( `nproc` * 2 )) )
 
 DISTRO := $(shell . /etc/os-release; if [ "$$ID" = "sle_hpc" ]; then ID="sles"; fi; echo $$ID)
 
-# By default the following two variables have the following values:
-LIBPSM2_COMPAT_CONF_DIR := /etc
-LIBPSM2_COMPAT_SYM_CONF_DIR := /etc
+PKG_CONFIG ?= pkg-config
+
+# Detect where kmod looks for packaged config files.
+# If that fails, default to /lib, which should work on all distros since 2011,
+# with or without /usr-merge.
+LIBPSM2_COMPAT_CONF_DIR := $(or $(shell $(PKG_CONFIG) --variable=distconfdir kmod 2>/dev/null),/lib)
+export LIBPSM2_COMPAT_CONF_DIR
+
+LIBPSM2_COMPAT_SYM_CONF_DIR := $(patsubst /usr%,\%{_prefix}%,$(LIBPSM2_COMPAT_CONF_DIR))
+
 # We can't set SPEC_FILE_RELEASE_DIST to an empty value, a space will result.
 # It then messes up sed operations for PSM_CUDA=1.
 # So leaving the commented out line here as documentation to NOT set it.
 # SPEC_FILE_RELEASE_DIST :=
 
 ifeq (fedora,$(DISTRO))
-	# On Fedora, we change these two variables to these values:
-	LIBPSM2_COMPAT_CONF_DIR := /usr/lib
-	LIBPSM2_COMPAT_SYM_CONF_DIR := %{_prefix}/lib
 	SPEC_FILE_RELEASE_DIST := %{?dist}
 else ifeq (rhel,${DISTRO})
 	# Insert code specific to RHEL here.
@@ -191,8 +195,6 @@ ifdef PSM_CUDA
 #Value needs to be something without spaces or dashes '-'
 SPEC_FILE_RELEASE_DIST += cuda
 endif
-
-export 	LIBPSM2_COMPAT_CONF_DIR
 
 # The desired version number comes from the most recent tag starting with "v"
 ifeq (true, $(shell git rev-parse --is-inside-work-tree 2>/dev/null))
@@ -247,8 +249,6 @@ VERSION_RELEASE := ${VERSION_RELEASE_OVERRIDE}
 endif
 
 LDLIBS := -lrt -ldl -lnuma ${EXTRA_LIBS} -pthread
-
-PKG_CONFIG ?= pkg-config
 
 UDEVDIR := $(shell $(PKG_CONFIG) --variable=udevdir udev 2>/dev/null)
 ifndef UDEVDIR
