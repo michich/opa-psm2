@@ -157,17 +157,6 @@ MINOR := $(PSM2_LIB_MINOR)
 
 nthreads := $(shell echo $$(( `nproc` * 2 )) )
 
-# The following line sets the DISTRO variable to:
-#  'rhel' if the host is running RHEL.
-#  'suse' if the host is running SUSE.
-#  'fedora' if the host is running Fedora.
-#  'ubuntu' if the host is running Ubuntu.
-#
-# The DISTRO variable is used subsequently for variable
-# behaviors of the 3 distros.
-
-DISTRO := $(shell . /etc/os-release; if [ "$$ID" = "sle_hpc" ]; then ID="sles"; fi; echo $$ID)
-
 PKG_CONFIG ?= pkg-config
 
 # Detect where kmod looks for packaged config files.
@@ -178,13 +167,8 @@ export LIBPSM2_COMPAT_CONF_DIR
 
 LIBPSM2_COMPAT_SYM_CONF_DIR := $(patsubst /usr%,\%{_prefix}%,$(LIBPSM2_COMPAT_CONF_DIR))
 
-ifeq (fedora,$(DISTRO))
-	SPEC_FILE_RELEASE_DIST := %{?dist}
-else ifeq (rhel,${DISTRO})
-	# Insert code specific to RHEL here.
-else ifeq (sles,${DISTRO})
-	# Insert code specific to SLES here.
-endif
+# Set %{?dist} on Fedora and Fedora-like distributions (ID or ID_LIKE contains "fedora").
+SPEC_FILE_RELEASE_DIST := $(shell . /etc/os-release; echo "$$ID $$ID_LIKE" | grep -qw fedora && echo '%{?dist}')
 
 ifdef PSM_CUDA
 #Value needs to be something without spaces or dashes '-'
