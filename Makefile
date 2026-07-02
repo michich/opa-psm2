@@ -178,11 +178,6 @@ export LIBPSM2_COMPAT_CONF_DIR
 
 LIBPSM2_COMPAT_SYM_CONF_DIR := $(patsubst /usr%,\%{_prefix}%,$(LIBPSM2_COMPAT_CONF_DIR))
 
-# We can't set SPEC_FILE_RELEASE_DIST to an empty value, a space will result.
-# It then messes up sed operations for PSM_CUDA=1.
-# So leaving the commented out line here as documentation to NOT set it.
-# SPEC_FILE_RELEASE_DIST :=
-
 ifeq (fedora,$(DISTRO))
 	SPEC_FILE_RELEASE_DIST := %{?dist}
 else ifeq (rhel,${DISTRO})
@@ -193,7 +188,7 @@ endif
 
 ifdef PSM_CUDA
 #Value needs to be something without spaces or dashes '-'
-SPEC_FILE_RELEASE_DIST += cuda
+SPEC_FILE_RELEASE_DIST := $(SPEC_FILE_RELEASE_DIST)cuda
 endif
 
 # The desired version number comes from the most recent tag starting with "v"
